@@ -12,26 +12,21 @@ def primitive_type_checker(odm_type, obj_value):
 
 
 def dict_check(obj_value: Dict[str, Any], odm_type):
-    # print(f'args {obj_value, odm_type}')
-
-    valid_key_type, valid_value_type = odm_type.__args__
-    print(valid_key_type, valid_value_type)
-
-    if valid_value_type not in PRIMITIVE_TYPES or valid_key_type not in PRIMITIVE_TYPES:
-        return False
-
     for key, value in obj_value.items():
 
-        value_type = type(value)
-        if value_type not in PRIMITIVE_TYPES and value_type not in SEQUENCE_TYPES:
-            return False
+        valid_value_type = odm_type[key]
 
-        else:
-            # odm_value_type = odm_type[key]
-            # print(f'valid odm type {odm_value_type} odm type in args {odm_type}')
-            # print(f'key -> {key} value {value} dict {odm_type.__args__} orignin {odm_type.__origin__}')
-            if type(key) != valid_key_type or value_type != valid_value_type:
+        if valid_value_type in PRIMITIVE_TYPES:
+            if type(value) != valid_value_type:
                 return False
+
+        elif str(type(valid_value_type)) == "<class 'typing._GenericAlias'>":
+
+            if valid_value_type.__origin__ == list:
+
+                is_valid = list_check(value, valid_value_type)
+                if not is_valid:
+                    return False
 
     return True
 
@@ -87,29 +82,41 @@ def check(my_odm: Dict[Any, Any], my_obj: Dict[Any, Any]):
         if value_type in SEQUENCE_TYPES:
 
             odm_value_type = my_odm[key]
-            if odm_value_type.__origin__ == value_type == list:
-                is_valid = list_check(value, odm_value_type)
-                if not is_valid:
+
+            if str(type(odm_value_type)) == "<class 'typing._GenericAlias'>":
+                if odm_value_type.__origin__ == value_type == list:
+                    is_valid = list_check(value, odm_value_type)
+                    if not is_valid:
+                        return False
+
+                else:
                     return False
 
-            elif odm_value_type.__origin__ == value_type == dict:
+            elif type(odm_value_type) == value_type == dict:
+
+                # ({'name_2': 'Priyansh'}, {'name_2': <class 'str'>})
+
                 is_valid = dict_check(value, odm_value_type)
                 if not is_valid:
                     return False
-
-            else:
-                return False
 
     return True
 
 
 d = {
-    'name': Dict[str, int]
+    'name': {
+        'name_2': str,
+        'name_list': List[int]
+    }
 }
 
 da = {
     'name': {
-        'name_2': 'Priyansh'
+        'name_2': 'Priyansh',
+        'name_list': [
+            'shivank',
+            'naman'
+        ]
     }
 }
 
