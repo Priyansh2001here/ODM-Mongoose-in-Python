@@ -140,6 +140,51 @@ class DictionaryOfList(unittest.TestCase):
         x = check(odm, data)
         self.assertTrue(x)
 
+################# todo #####################
+class Dictionary(unittest.TestCase):
+
+    def test_dict(self):
+        odm = {
+            'name': {
+                'first name': str,
+                'last name': str
+            },
+            'number of frnds': int
+        }
+
+        data = {
+            'name': {
+                'first name': 'Priyansh',
+                'last name': 'Singh'
+            },
+            'number of frnds': 3
+        }
+
+        is_valid = check(odm, data)
+        self.assertTrue(is_valid)
+
+        data = {
+            'name': {
+                'first name': 'Priyansh',
+                'last name': 'Singh'
+            },
+            'number of frnds': '3'
+        }
+
+        is_valid = check(odm, data)
+        self.assertFalse(is_valid)
+
+        data = {
+            'name': {
+                'first name': 'Priyansh',
+                'last name': 89763
+            },
+            'number of frnds': 3
+        }
+
+        is_valid = check(odm, data)
+        self.assertFalse(is_valid)
+
 
 if __name__ == '__main__':
     unittest.main()
