@@ -110,6 +110,36 @@ class DictionaryOfList(unittest.TestCase):
         x = check(odm, data)
         self.assertTrue(x)
 
+        data = {
+            'data': [['Priyansh']]
+        }
+        x = check(odm, data)
+        self.assertFalse(x)
+
+        data = {
+            'data': [9, 5, 6]
+        }
+        x = check(odm, data)
+        self.assertFalse(x)
+
+    def test_new(self):
+        odm = {
+            'data': List[List[int]]
+        }
+        data = {
+            'data': {}
+        }
+
+        x = check(odm, data)
+        self.assertFalse(x)
+
+        data = {
+            'data': []
+        }
+
+        x = check(odm, data)
+        self.assertTrue(x)
+
 
 if __name__ == '__main__':
     unittest.main()
