@@ -16,16 +16,6 @@ def dict_check(obj_value: Dict[str, Any], odm_type):
 
         valid_value_type = odm_type[key]
 
-        # if type(valid_value_type == dict):
-        #
-        # values = obj_value.get(key)
-        #
-        # print(f'new args {key}, {values} {valid_value_type}')
-        #
-        # is_valid = dict_check(values, valid_value_type)
-        # if not is_valid:
-        #     return False
-
         try:
             if valid_value_type in PRIMITIVE_TYPES:
                 if type(value) != valid_value_type:
