@@ -1,6 +1,8 @@
 import unittest
-from odm import check
 from typing import List
+from odm import Validator
+
+v = Validator()
 
 
 class OneDimensional(unittest.TestCase):
@@ -17,7 +19,7 @@ class OneDimensional(unittest.TestCase):
             'age': int,
             'address': str
         }
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertTrue(x)
 
     def test_false(self):
@@ -32,7 +34,7 @@ class OneDimensional(unittest.TestCase):
             'age': int,
             'address': int
         }
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertFalse(x)
 
 
@@ -69,9 +71,9 @@ class DictionaryOfList(unittest.TestCase):
             'friends': List[str]
         }
 
-        x = check(odm, data_true)
+        x = v.validate(odm, data_true)
         self.assertTrue(x)
-        x = check(odm, data_false)
+        x = v.validate(odm, data_false)
         self.assertFalse(x)
 
     def test_list_of_integers(self):
@@ -91,11 +93,11 @@ class DictionaryOfList(unittest.TestCase):
             'numbers': List[int]
         }
 
-        x = check(odm, data_true)
+        x = v.validate(odm, data_true)
         self.assertTrue(x)
-        x = check(odm, data_false)
+        x = v.validate(odm, data_false)
         self.assertFalse(x)
-        x = check(odm, data_false_2)
+        x = v.validate(odm, data_false_2)
         self.assertFalse(x)
 
     def test_list_of_list(self):
@@ -107,19 +109,19 @@ class DictionaryOfList(unittest.TestCase):
             'data': [[1, 3, 4]]
         }
 
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertTrue(x)
 
         data = {
             'data': [['Priyansh']]
         }
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertFalse(x)
 
         data = {
             'data': [9, 5, 6]
         }
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertFalse(x)
 
     def test_new(self):
@@ -130,14 +132,14 @@ class DictionaryOfList(unittest.TestCase):
             'data': {}
         }
 
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertFalse(x)
 
         data = {
             'data': []
         }
 
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertTrue(x)
 
 
@@ -160,7 +162,7 @@ class Dictionary(unittest.TestCase):
             'number of frnds': 3
         }
 
-        is_valid = check(odm, data)
+        is_valid = v.validate(odm, data)
         self.assertTrue(is_valid)
 
         data = {
@@ -171,7 +173,7 @@ class Dictionary(unittest.TestCase):
             'number of frnds': '3'
         }
 
-        is_valid = check(odm, data)
+        is_valid = v.validate(odm, data)
         self.assertFalse(is_valid)
 
         data = {
@@ -182,7 +184,7 @@ class Dictionary(unittest.TestCase):
             'number of frnds': 3
         }
 
-        is_valid = check(odm, data)
+        is_valid = v.validate(odm, data)
         self.assertFalse(is_valid)
 
     def test_2D(self):
@@ -204,7 +206,7 @@ class Dictionary(unittest.TestCase):
             }
         }
 
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertTrue(x)
 
         data = {
@@ -216,7 +218,7 @@ class Dictionary(unittest.TestCase):
             }
         }
 
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertFalse(x)
 
         data = {
@@ -228,7 +230,7 @@ class Dictionary(unittest.TestCase):
             }
         }
 
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertFalse(x)
 
         odm = {
@@ -249,19 +251,19 @@ class Dictionary(unittest.TestCase):
             }
         }
 
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertFalse(x)
 
         data = {
             'add': {
                 'coordinates': {
-                    'lat': [12,23,5],
+                    'lat': [12, 23, 5],
                     'long': 12
                 }
             }
         }
 
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertTrue(x)
 
         data = {
@@ -273,7 +275,7 @@ class Dictionary(unittest.TestCase):
             }
         }
 
-        x = check(odm, data)
+        x = v.validate(odm, data)
         self.assertFalse(x)
 
 
