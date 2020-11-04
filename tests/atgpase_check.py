@@ -140,10 +140,11 @@ class DictionaryOfList(unittest.TestCase):
         x = check(odm, data)
         self.assertTrue(x)
 
+
 ################# todo #####################
 class Dictionary(unittest.TestCase):
 
-    def test_dict(self):
+    def test_1D(self):
         odm = {
             'name': {
                 'first name': str,
@@ -184,6 +185,97 @@ class Dictionary(unittest.TestCase):
 
         is_valid = check(odm, data)
         self.assertFalse(is_valid)
+
+    def test_2D(self):
+        odm = {
+            'add': {
+                'coordinates': {
+                    'lat': int,
+                    'long': int
+                }
+            }
+        }
+
+        data = {
+            'add': {
+                'coordinates': {
+                    'lat': 19,
+                    'long': 12
+                }
+            }
+        }
+
+        x = check(odm, data)
+        self.assertTrue(x)
+
+        data = {
+            'add': {
+                'coordinates': {
+                    'lat': 'Priyansh',
+                    'long': 12
+                }
+            }
+        }
+
+        x = check(odm, data)
+        self.assertFalse(x)
+
+        data = {
+            'add': {
+                'coordinates': {
+                    'lat': 19,
+                    'long': 'Singh'
+                }
+            }
+        }
+
+        x = check(odm, data)
+        self.assertFalse(x)
+
+        odm = {
+            'add': {
+                'coordinates': {
+                    'lat': List[int],
+                    'long': int
+                }
+            }
+        }
+
+        data = {
+            'add': {
+                'coordinates': {
+                    'lat': 19,
+                    'long': 12
+                }
+            }
+        }
+
+        x = check(odm, data)
+        self.assertFalse(x)
+
+        data = {
+            'add': {
+                'coordinates': {
+                    'lat': [12,23,5],
+                    'long': 12
+                }
+            }
+        }
+
+        x = check(odm, data)
+        self.assertTrue(x)
+
+        data = {
+            'add': {
+                'coordinates': {
+                    'lat': [[19]],
+                    'long': 12
+                }
+            }
+        }
+
+        x = check(odm, data)
+        self.assertFalse(x)
 
 
 if __name__ == '__main__':

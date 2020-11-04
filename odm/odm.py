@@ -16,15 +16,34 @@ def dict_check(obj_value: Dict[str, Any], odm_type):
 
         valid_value_type = odm_type[key]
 
-        if valid_value_type in PRIMITIVE_TYPES:
-            if type(value) != valid_value_type:
-                return False
+        # if type(valid_value_type == dict):
+        #
+        # values = obj_value.get(key)
+        #
+        # print(f'new args {key}, {values} {valid_value_type}')
+        #
+        # is_valid = dict_check(values, valid_value_type)
+        # if not is_valid:
+        #     return False
 
-        elif str(type(valid_value_type)) == "<class 'typing._GenericAlias'>":
+        try:
+            if valid_value_type in PRIMITIVE_TYPES:
+                if type(value) != valid_value_type:
+                    return False
 
-            if valid_value_type.__origin__ == list:
+            elif str(type(valid_value_type)) == "<class 'typing._GenericAlias'>":
 
-                is_valid = list_check(value, valid_value_type)
+                if valid_value_type.__origin__ == list:
+
+                    is_valid = list_check(value, valid_value_type)
+                    if not is_valid:
+                        return False
+        except TypeError as _:
+
+            if type(valid_value_type) == dict:
+                values = obj_value.get(key)
+
+                is_valid = dict_check(values, valid_value_type)
                 if not is_valid:
                     return False
 
@@ -100,24 +119,7 @@ def check(my_odm: Dict[Any, Any], my_obj: Dict[Any, Any]):
                 if not is_valid:
                     return False
 
+            elif odm_value_type == Any:
+                continue
+
     return True
-
-
-d = {
-    'name': {
-        'name_2': str,
-        'name_list': List[int]
-    }
-}
-
-da = {
-    'name': {
-        'name_2': 'Priyansh',
-        'name_list': [
-            'shivank',
-            'naman'
-        ]
-    }
-}
-
-print(check(d, da))
